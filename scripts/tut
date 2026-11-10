@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Entry point for the tutorial-video engine: `tut <command> ...` (run without arguments for the list).
+set -euo pipefail
+SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ENGINE="$SKILL_DIR/engine"
+if [ ! -x "$ENGINE/node_modules/.bin/tsx" ]; then
+  echo "Instalando o motor de vídeo (uma vez só)..." >&2
+  (cd "$ENGINE" && npm install --no-fund --no-audit --loglevel=error >&2)
+fi
+exec "$ENGINE/node_modules/.bin/tsx" "$ENGINE/src/cli.ts" "$@"
